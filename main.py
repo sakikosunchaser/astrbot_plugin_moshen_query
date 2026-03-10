@@ -1,24 +1,107 @@
-from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
+from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api.star import Context, Star, register
-from astrbot.api import logger
 
-@register("helloworld", "YourName", "一个简单的 Hello World 插件", "1.0.0")
-class MyPlugin(Star):
+
+@register(
+    "mo_cai_query",
+    "sakikosunchaser",
+    "魔裁群查询插件，支持地区简称查询",
+    "1.0.0"
+)
+class MoCaiQueryPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
 
-    async def initialize(self):
-        """可选择实现异步的插件初始化方法，当实例化该插件类之后会自动调用该方法。"""
+        self.group_data = {
+            "辽宁沈阳": ["912500562"],
+            "江浙沪": ["1064268361"],
+            "北京": ["864946063", "983416136"],
+            "山西": ["468266719"],
+            "西南": ["1044753946"],
+            "广东": ["1091203810"],
+            "川渝": ["754903463"],
+        }
 
-    # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
-    @filter.command("helloworld")
-    async def helloworld(self, event: AstrMessageEvent):
-        """这是一个 hello world 指令""" # 这是 handler 的描述，将会被解析方便用户了解插件内容。建议填写。
-        user_name = event.get_sender_name()
-        message_str = event.message_str # 用户发的纯文本消息字符串
-        message_chain = event.get_messages() # 用户所发的消息的消息链 # from astrbot.api.message_components import *
-        logger.info(message_chain)
-        yield event.plain_result(f"Hello, {user_name}, 你发了 {message_str}!") # 发送一条纯文本消息
+        self.alias_map = {
+            "北京": "北京",
+            "京": "北京",
 
-    async def terminate(self):
-        """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
+            "辽宁": "辽宁沈阳",
+            "辽": "辽宁沈阳",
+            "沈阳": "辽宁沈阳",
+            "辽沈": "辽宁沈阳",
+
+            "江浙沪": "江浙沪",
+            "江苏": "江浙沪",
+            "苏": "江浙沪",
+            "浙江": "江浙沪",
+            "浙": "江浙沪",
+            "上海": "江浙沪",
+            "沪": "江浙沪",
+
+            "山西": "山西",
+            "晋": "山西",
+
+            "西南": "西南",
+            "重庆": "西南",
+            "渝": "西南",
+            "四川": "西南",
+            "川": "西南",
+            "贵州": "西南",
+            "黔": "西南",
+            "云南": "西南",
+            "云": "西南",
+            "滇": "西南",
+            "西藏": "西南",
+            "藏": "西南",
+
+            "广东": "广东",
+            "粤": "广东",
+
+            "川渝": "川渝",
+        }
+
+    def format_all(self):
+        msg = ["全国魔裁群群号：", ""]
+        for region, groups in self.group_data.items():
+            if region == "北京":
+                msg.append(f"{region}：")
+                msg.append(f"1群：{groups[0]}")
+                msg.append(f"2群：{groups[1]}")
+            else:
+                msg.append(f"{region}：{' / '.join(groups)}")
+        return "\n".join(msg)
+
+    def format_one(self, region: str):
+        groups = self.group_data.get(region)
+        if not groups:
+            return "未找到该地区信息。"
+
+        if region == "北京":
+            return f"{region}魔裁群群号：\n1群：{groups[0]}\n2群：{groups[1]}"
+        return f"{region}魔裁群群号：\n" + "\n".join(groups)
+
+    @filter.command("魔裁查询")
+    async def query(self, event: AstrMessageEvent):
+        text = event.message_str.strip()
+
+        if text.startswith("/魔裁查询"):
+            keyword = text.replace("/魔裁查询", "", 1).strip()
+        else:
+            keyword = text.replace("魔裁查询", "", 1).strip()
+
+        if not keyword:
+            yield event.plain_result(self.format_all())
+            return
+
+        region = self.alias_map.get(keyword)
+        if not region:
+            yield event.plain_result(
+                "未找到对应地区。\n"
+                "示例：/魔裁查询 北京\n"
+                "示例：/魔裁查询 京\n"
+                "不带参数可查看全部。"
+            )
+            return
+
+        yield event.plain_result(self.format_one(region))
