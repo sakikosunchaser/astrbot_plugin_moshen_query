@@ -1,14 +1,67 @@
-# astrbot-plugin-helloworld
+魔裁群查询插件
 
-AstrBot 插件模板 / A template plugin for AstrBot plugin feature
+一个用于 AstrBot 的魔裁群查询插件，支持按地区名称或简称查询对应的 QQ 群号。
 
-> [!NOTE]
-> This repo is just a template of [AstrBot](https://github.com/AstrBotDevs/AstrBot) Plugin.
-> 
-> [AstrBot](https://github.com/AstrBotDevs/AstrBot) is an agentic assistant for both personal and group conversations. It can be deployed across dozens of mainstream instant messaging platforms, including QQ, Telegram, Feishu, DingTalk, Slack, LINE, Discord, Matrix, etc. In addition, it provides a reliable and extensible conversational AI infrastructure for individuals, developers, and teams. Whether you need a personal AI companion, an intelligent customer support agent, an automation assistant, or an enterprise knowledge base, AstrBot enables you to quickly build AI applications directly within your existing messaging workflows.
+## 功能
 
-# Supports
+- 支持 `/魔裁查询`
+  - 返回全部地区群号
+- 支持 `/魔裁查询 北京`
+  - 查询指定地区群号
+- 支持 `/魔裁查询 京`
+  - 支持地区简称查询
 
-- [AstrBot Repo](https://github.com/AstrBotDevs/AstrBot)
-- [AstrBot Plugin Development Docs (Chinese)](https://docs.astrbot.app/dev/star/plugin-new.html)
-- [AstrBot Plugin Development Docs (English)](https://docs.astrbot.app/en/dev/star/plugin-new.html)
+## 支持的地区
+
+- 北京
+- 辽宁沈阳
+- 江浙沪
+- 山西
+- 西南
+- 广东
+- 川渝
+
+## 使用示例
+
+```text
+/魔裁查询
+/魔裁查询 北京
+/魔裁查询 京
+/魔裁查询 粤
+/魔裁查询 沪
+```
+
+## 返回示例
+
+### `/魔裁查询 北京`
+
+```text
+北京魔裁群群号：
+1群：864946063
+2群：983416136
+```
+
+### `/魔裁查询`
+
+```text
+全国魔裁群群号：
+辽宁沈阳：912500562
+江浙沪：1064268361
+北京：
+1群：864946063
+2群：983416136
+山西：468266719
+西南：1044753946
+广东：1091203810
+川渝：754903463
+```
+
+## 插件信息
+
+- 插件名：mo_cai_query
+- 作者：sakikosunchaser
+- 版本：1.0.0
+
+## 备注
+
+数据更新时间：2026-03-10
