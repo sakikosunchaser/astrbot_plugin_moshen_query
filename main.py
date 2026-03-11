@@ -6,7 +6,7 @@ from astrbot.api.star import Context, Star, register
     "mo_cai_query",
     "sakikosunchaser",
     "魔裁群查询插件，支持地区简称查询",
-    "1.0.1"
+    "1.0.2"
 )
 class MoCaiQueryPlugin(Star):
     def __init__(self, context: Context):
@@ -20,7 +20,8 @@ class MoCaiQueryPlugin(Star):
             "西南": ["1044753946"],
             "广东": ["1091203810"],
             "川渝": ["754903463"],
-            "广西": ["1081065316"],
+            "广西": ["1081063516"],
+            "福建": ["1058911737"],
         }
 
         self.alias_map = {
@@ -63,6 +64,9 @@ class MoCaiQueryPlugin(Star):
 
             "广西": "广西",
             "桂": "广西",
+
+            "福建": "福建",
+            "闽": "福建",
         }
 
     def format_all(self):
@@ -104,6 +108,7 @@ class MoCaiQueryPlugin(Star):
                 "未找到对应地区。\n"
                 "示例：/魔裁查询 北京\n"
                 "示例：/魔裁查询 京\n"
+                "示例：/魔裁查询 闽\n"
                 "不带参数可查看全部。"
             )
             return
