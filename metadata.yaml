@@ -3,4 +3,4 @@ display_name: 全国魔裁地图查询
 desc: 魔裁群查询插件，支持地区简称查询。
 version: v1.1.0
 author: Sunchaser
-repo: sakikosunchaser/astrbot_plugin_moshen_query
+repo: https://github.com/sakikosunchaser/astrbot_plugin_moshen_query
